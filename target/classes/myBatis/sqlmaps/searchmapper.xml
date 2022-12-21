@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="Search">
+	
+	<!-- 검색 -->
+
+		<select id="searchinfo" resultType="com.mealkit.search.SearchVo">
+
+      select
+     product.PRODUCT_NUMBER
+    ,product.PRODUCT_NAME
+    ,product.PRODUCT_PRICE
+    ,product_img.FILENAME
+    ,product_img.UPLOADPATH
+    ,product_img.UUID
+    FROM 
+        PRODUCT 
+        FULL OUTER JOIN product_img
+        ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+        where 
+        	product.product_name like '%'|| #{keyword} || '%' 
+     
+      </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="Cart">
+	
+	<!-- 카트에 상품 추가 -->
+	<insert id="cartAdd">     
+		INSERT INTO cart (
+		    cart_no,
+		    product_number,
+		    product_stock,
+		    product_price,
+		    cart_total,
+		    member_id,
+		    product_name
+		) VALUES (
+			CART_NO.nextval,
+			#{product_number},
+			#{product_stock, jdbcType = INTEGER},
+			#{product_price, jdbcType = INTEGER},
+			#{product_stock, jdbcType = INTEGER}*#{product_price, jdbcType = INTEGER},
+			#{member_id},
+			#{product_name}
+		)		
+	</insert> 
+	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart">   
+		DELETE FROM
+			CART
+		WHERE
+			CART_NO = #{cart_no}
+	</delete>
+	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart2">   
+		DELETE FROM
+			CART
+		WHERE
+			CART_NO = #{cart_no}
+	</delete>
+	
+	<!-- 카트 수량 수정 -->
+	<update id="">      
+		UPDATE 
+			CART
+		SET
+			PRODUCT_STOCK = #{product_stock}
+		WHERE
+			CART_NO = #{cart_no}
+	</update>
+	
+	<!-- 카트 목록 -->
+	<select id="CartList" resultType="com.mealkit.product.cart.CartVo">      
+		SELECT
+			CART_NO,
+			PRODUCT_NUMBER,
+			PRODUCT_STOCK,
+			PRODUCT_PRICE,
+			ADD_CHARGE,
+			CART_TOTAL
+		FROM
+			CART
+	</select>
+	
+	<select id="CartList2" resultType="com.mealkit.product.cart.CartVo">      
+		SELECT
+			CART_NO,
+			PRODUCT_NUMBER,
+			PRODUCT_STOCK,
+			PRODUCT_PRICE,
+			ADD_CHARGE,
+			CART_TOTAL,
+			MEMBER_ID,
+			PRODUCT_NAME
+		FROM
+			CART
+		WHERE MEMBER_ID = #{ member_id }
+	</select>
+	
+	<select id="getCartSum" resultType="int">      
+		select NVL(sum(cart_total),0) from cart where member_id = #{member_id}
+	</select>
+  </mapper>

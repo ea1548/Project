@@ -1,0 +1,205 @@
+@charset "UTF-8";
+
+	
+	  html{
+	  	 height: 100%;
+	  	 background-color: #F3EFE0;
+	  }
+	  
+	  body {
+
+	  	height: 1500px;
+	  	overflow-x:auto;
+	  	overflow-y:auto; 
+  		white-space: nowrap;
+	  	
+	  }
+	  
+	  span{
+	  	position: relative;
+	  	top: 5px;
+	  	left: 250px;
+	  }
+	  
+	  .name{
+	  	position: relative;
+	  	top: 0px;
+	  	left: 0px;
+	  }
+	  
+	  .date{
+	 	position: relative;
+	  	top: 0px;
+	  	left: 0px;
+	  }
+	  
+	  
+	  
+	  .icon{
+	 		position: relative;
+	 		top: -73px;
+	 		left: 29px;
+	 	}
+		
+		
+	  .navbar{
+	  	height: 60px;
+	  	padding-left: 30px;
+	  }
+	  
+	  .navbar ul{
+	    float: right;
+		position: relative;
+		left: 0px;
+		top: 0px;
+	  }
+	  
+	  .navbar li{
+	    list-style-type: none;
+	    float: left;
+	    margin-right: 30px;
+	  }
+	  
+	  .navbar a{
+	    text-decoration: none;
+	    color: black;
+	    font-size: 30px;
+	  }
+	
+	  .logo{
+	    	position: relative;
+	    	top: -32px;
+	    	left: 80px;
+	    	text-decoration: none;
+	    	font-size: 30px;
+	  }
+	  
+	  .sidemenu {
+		    height: 100%;
+		    width: 0;
+		    position: fixed;
+		    z-index: 1;
+		    top: 0;
+		    left: 0;
+		    background-color: #111;
+		    overflow-x: hidden;
+		    transition: 0.5s;
+		    padding-top: 60px;
+		    line-height: 90px;
+		}
+		
+		.sidemenu a {
+		    padding: 8px 8px 8px 32px;
+		    text-decoration: none;
+		    font-size: 25px;
+		    color: #818181;
+		    display: block;
+		    transition: 0.3s;
+		}
+		
+		.sidemenu a:hover {
+		    color: #f1f1f1;
+		}
+		
+		.sidemenu .closebtn {
+		    position: absolute;
+		    top: 0;
+		    right: 25px;
+		    font-size: 36px;
+		    margin-left: 50px;
+		}
+		
+		@media screen and (max-height: 450px) {
+		  .sidemenu {padding-top: 15px;}
+		  .sidemenu a {font-size: 18px;}
+		}
+		
+		.info{
+			
+			overflow: hidden;
+			
+		}
+		
+		.info img{
+			float: left;
+			position: relative;
+			left: 250px;
+			top: 50px;
+			
+		}
+		
+		.info ul{
+			overflow: hidden;
+			float: left;
+			display: block;
+			position: relative;
+    		left: 300px;
+		}
+
+		.info p{
+			line-height: 60px;
+		}
+		
+		.info p a{
+			text-decoration-line: none;
+			color:white;
+		}
+
+		.info select{
+			margin-left: 20px;
+		}
+
+		.info button{
+			cursor: pointer; 
+			width: 25%; 
+		    margin: 25px 20px;
+		    border: none;
+		    background-color: #1673ea;
+		    color: #fff; 
+		    font-size: 14px; 
+		    font-weight: bold;
+		    line-height: 50px;
+		    
+		}
+		
+		
+		
+		input{
+   			width: 600px;
+    		height: 3.3em;
+    		position: relative;
+    		top: 50px;
+    		left: 210px;
+		}
+		
+		#comment{
+			position: relative;
+			left: 300px;
+		}
+		
+		#submit{
+		    background-color: rgb(0, 128,255);
+		    width: 80px;
+		    height: 50px;
+		    font-size: 15px;
+		    font-weight: bold;
+		    color: aliceblue;
+		    border: none;
+		    cursor: pointer;
+		    position: relative;
+		    top: 52px;
+		    left: 204px;
+		    
+		}
+		
+		.text{
+			position: relative;
+			top: 0px;
+			left: 0px;
+		}
+		
+		.commentlist{
+			position: relative;
+			top: 60px;
+			left: 260px;
+		}

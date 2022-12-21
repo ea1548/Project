@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+	.back_page{
+		position: absolute;
+		left: 59%;
+		top: 65%;
+		border: none;
+		background-color: #1673ea;
+		color: #fff;
+		line-height: 40px;
+		width: 10%;
+		border-radius: 3px;
+		font-size: 15px;
+	}
+	
+	.purchase{
+		position: absolute;
+		left: 70%;
+		top: 65%;
+		border: none;
+		background-color: #1673ea;
+		color: #fff;
+		line-height: 40px;
+		width: 10%;
+		border-radius: 3px;
+		font-size: 15px;
+	}
+	
+	.btn.btn-danger.btn-sm{
+		width: 50%
+	}
+	
+	th,td{
+		text-align: center;
+		font-size: 15px;
+	}
+	
+	h1{
+		position: relative;
+		bottom: 2em;
+		text-align: center;
+	}

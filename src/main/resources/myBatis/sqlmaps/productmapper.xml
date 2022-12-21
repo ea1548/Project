@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="Product">
+
+
+  <!--  상품 등록 -->
+    <insert id="ProductEnroll"	>
+    	
+    	<selectKey resultType="int" keyProperty="product_number" order="AFTER">
+  		
+  			SELECT MAX(product_number) FROM product
+  		
+  		</selectKey>  	
+  		 
+      INSERT INTO PRODUCT(
+      PRODUCT_NUMBER, PRODUCT_NAME, PRODUCT_PRICE,
+      PRODUCT_STOCK, PRODUCT_DESC, CATEGORY_CODE)
+      VALUES(
+      ( SELECT NVL(MAX(PRODUCT_NUMBER),0)+1 FROM PRODUCT ), 
+      #{product_name,jdbcType=VARCHAR}, #{product_price},
+      #{product_stock}, #{product_desc,jdbcType=VARCHAR}, #{category_code,jdbcType=VARCHAR} 
+      )   
+       </insert>
+  
+   <!-- 이미지 등록   -->
+   <insert id="imageEnroll">
+   
+   INSERT INTO 
+   	PRODUCT_IMG(
+		 PRODUCT_NUMBER,
+		 FILENAME,
+		 UPLOADPATH,
+  		 UUID)
+	values (
+	#{product_number}, 
+	#{fileName, jdbcType=VARCHAR}, 
+	#{uploadPath, jdbcType=VARCHAR}, 
+	#{uuid, jdbcType=VARCHAR}
+	)
+	
+   
+   </insert>
+
+
+<!-- 지정 상품 이미지 정보 얻기 -->
+	<select id="getAttachInfo" resultType="com.mealkit.product.AttachImageVO">
+	
+		SELECT * FROM PRODUCT_IMG WHERE PRODUCT_NUMBER = #{product_number}
+	
+	</select>	
+
+  <!--  이미지 정보 반환 -->
+   
+   <select id="getAttachList" resultType="com.mealkit.product.AttachImageVO">
+	
+		SELECT * FROM PRODUCT_IMG WHERE PRODUCT_NUMBER = #{product_number}
+	
+	</select>
+    
+   
+   
+   <!-- 카테고리 추가 -->
+   
+    <insert id="cateEnroll">
+      INSERT INTO PRODUCT_CATEGORY(
+      CATEGORY_CODE,
+      CATEGORYNAME
+      )VALUES(
+      #{CATEGORY_CODE} ,
+      #{CATEGORYNAME}
+      )
+    </insert>    
+      
+      
+      
+     <!--  상품 목록 당기기 -->      
+      <select id = "ProductList"
+      	resultType="com.mealkit.product.ProductVo">
+      	SELECT 
+      	PRODUCT_NUMBER,
+		PRODUCT_NAME,
+		CATEGORY_CODE,
+		PRODUCT_PRICE,
+		PRODUCT_STOCK,
+		PRODUCT_DESC
+		FROM
+			PRODUCT
+		ORDER BY PRODUCT_NUMBER
+      </select>
+     
+     
+      <!--  상품 수정 목록 당기기 -->      
+      <select id = "updateDetail"
+      	resultType="com.mealkit.product.ProductVo">
+      	SELECT 
+      	PRODUCT_NUMBER,
+		PRODUCT_NAME,
+		CATEGORY_CODE,
+		PRODUCT_PRICE,
+		PRODUCT_STOCK,
+		PRODUCT_DESC
+		FROM
+			PRODUCT
+		WHERE PRODUCT_NUMBER = #{ product_number}
+      </select>
+     
+     
+     
+       <!--  제품 정보 수정 -->
+      <update id="Modifyproduct">
+  	
+  		UPDATE
+  		 PRODUCT 
+  		 SET 
+  			PRODUCT.PRODUCT_NAME = #{ product_name, jdbcType=VARCHAR },
+  			PRODUCT.PRODUCT_PRICE = #{product_price}, 
+  			PRODUCT.PRODUCT_STOCK = #{product_stock},
+  			PRODUCT.PRODUCT_DESC = #{product_desc, jdbcType=VARCHAR }
+  		 
+  		where PRODUCT.PRODUCT_NUMBER = #{ product_number}
+  	
+  		</update>       
+     
+     
+     
+     <!-- 한식  리스트 정보 -->
+      <select id="koreaList" resultType="com.mealkit.product.ProductImgVo">
+      
+      	  SELECT 
+         PRODUCT_NUMBER
+          ,PRODUCT_NAME          
+          ,PRODUCT_PRICE      
+          ,FILENAME
+          ,UPLOADPATH
+          ,UUID
+    FROM  ( 
+    SELECT 
+           product.PRODUCT_NUMBER
+          ,product.PRODUCT_NAME          
+          ,product.PRODUCT_PRICE      
+          ,product_img.FILENAME
+          ,product_img.UPLOADPATH
+          ,product_img.UUID
+          ,ROW_NUMBER() OVER(ORDER BY product.PRODUCT_NUMBER DESC) AS RNUM
+           FROM PRODUCT 
+           FULL OUTER JOIN product_img
+           ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER 
+        where category_code = 01) FR
+      WHERE RNUM BETWEEN  #{ rowStart } AND #{ rowEnd } 
+      ORDER BY PRODUCT_NUMBER DESC
+  		 
+      
+   
+      </select>
+      
+    
+      
+      
+      
+      <!--and product.PRODUCT_NAME like '%' || #{searchtext} || '%' -->
+        <!-- 중식 리스트 -->
+        <select id="chinaList" resultType="com.mealkit.product.ProductImgVo">
+      
+      	     	  SELECT 
+         PRODUCT_NUMBER
+          ,PRODUCT_NAME          
+          ,PRODUCT_PRICE      
+          ,FILENAME
+          ,UPLOADPATH
+          ,UUID
+    FROM  ( 
+    SELECT 
+           product.PRODUCT_NUMBER
+          ,product.PRODUCT_NAME          
+          ,product.PRODUCT_PRICE      
+          ,product_img.FILENAME
+          ,product_img.UPLOADPATH
+          ,product_img.UUID
+          ,ROW_NUMBER() OVER(ORDER BY product.PRODUCT_NUMBER DESC) AS RNUM
+           FROM PRODUCT 
+           FULL OUTER JOIN product_img
+           ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER 
+        where category_code = 02) FR
+      WHERE RNUM BETWEEN  #{ rowStart } AND #{ rowEnd } 
+      ORDER BY PRODUCT_NUMBER DESC
+      </select>
+      
+        <!-- 일식 리스트 -->
+      <select id="japList" resultType="com.mealkit.product.ProductVo">
+      	
+      	    	  SELECT 
+         PRODUCT_NUMBER
+          ,PRODUCT_NAME          
+          ,PRODUCT_PRICE      
+          ,FILENAME
+          ,UPLOADPATH
+          ,UUID
+    FROM  ( 
+    SELECT 
+           product.PRODUCT_NUMBER
+          ,product.PRODUCT_NAME          
+          ,product.PRODUCT_PRICE      
+          ,product_img.FILENAME
+          ,product_img.UPLOADPATH
+          ,product_img.UUID
+          ,ROW_NUMBER() OVER(ORDER BY product.PRODUCT_NUMBER DESC) AS RNUM
+           FROM PRODUCT 
+           FULL OUTER JOIN product_img
+           ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER 
+        where category_code = 03) FR
+      WHERE RNUM BETWEEN  #{ rowStart } AND #{ rowEnd } 
+      ORDER BY PRODUCT_NUMBER DESC
+      
+      
+      </select>
+      
+        <!-- 양식 리스트 -->
+      <select id="euList" resultType="com.mealkit.product.ProductVo">
+          	  SELECT 
+         PRODUCT_NUMBER
+          ,PRODUCT_NAME          
+          ,PRODUCT_PRICE      
+          ,FILENAME
+          ,UPLOADPATH
+          ,UUID
+    FROM  ( 
+    SELECT 
+           product.PRODUCT_NUMBER
+          ,product.PRODUCT_NAME          
+          ,product.PRODUCT_PRICE      
+          ,product_img.FILENAME
+          ,product_img.UPLOADPATH
+          ,product_img.UUID
+          ,ROW_NUMBER() OVER(ORDER BY product.PRODUCT_NUMBER DESC) AS RNUM
+           FROM PRODUCT 
+           FULL OUTER JOIN product_img
+           ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER 
+        where category_code = 04) FR
+      WHERE RNUM BETWEEN  #{ rowStart } AND #{ rowEnd } 
+      ORDER BY PRODUCT_NUMBER DESC
+      
+      </select>
+      
+        <!-- 이벤트 리스트 -->
+      <select id="eventList" resultType="com.mealkit.product.ProductVo">
+      	
+      	       	  SELECT 
+         PRODUCT_NUMBER
+          ,PRODUCT_NAME          
+          ,PRODUCT_PRICE      
+          ,FILENAME
+          ,UPLOADPATH
+          ,UUID
+    FROM  ( 
+    SELECT 
+           product.PRODUCT_NUMBER
+          ,product.PRODUCT_NAME          
+          ,product.PRODUCT_PRICE      
+          ,product_img.FILENAME
+          ,product_img.UPLOADPATH
+          ,product_img.UUID
+          ,ROW_NUMBER() OVER(ORDER BY product.PRODUCT_NUMBER DESC) AS RNUM
+           FROM PRODUCT 
+           FULL OUTER JOIN product_img
+           ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER 
+        where category_code = 05) FR
+      WHERE RNUM BETWEEN  #{ rowStart } AND #{ rowEnd } 
+      ORDER BY PRODUCT_NUMBER DESC
+      
+      </select>
+      
+      <!-- 
+     SELECT 
+  		e.PRODUCT_NUMBER, e.PRODUCT_NAME, e.PRODUCT_PRICE, 
+  		e.PRODUCT_STOCK, e.PRODUCT_DESC, e.CATEGORY_CODE,
+  		d.fileName, d.PRODUCT_NUMBER
+  		FROM 
+  		PRODUCT e left join 
+  		PRODUCT_IMG d 
+        on e.PRODUCT_NUMBER = d.PRODUCT_NUMBER  		  		
+  		WHERE e.CATEGORY_CODE = '01'
+       -->
+     <!-- 한식 상세 페이지 -->
+  	<select id="koreaInfo" resultType="com.mealkit.product.ProductVo">
+  	
+  	select
+     product.PRODUCT_NUMBER
+    ,product.PRODUCT_NAME
+    ,product.PRODUCT_STOCK
+    ,product.PRODUCT_PRICE
+    ,product.PRODUCT_DESC
+    ,product_img.FILENAME
+    ,product_img.UPLOADPATH
+    ,product_img.UUID
+    FROM 
+        PRODUCT 
+        FULL OUTER JOIN product_img
+        ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+        where product.product_number = #{product.product_number}		  		
+  	
+  	
+  	
+  	</select>  	 	 	
+      
+     <!-- 한식 상세 페이지 
+  	<select id="koreaInfo" resultType="com.mealkit.product.ProductVo">
+  	
+  		SELECT 
+  		PRODUCT_NAME,  PRODUCT_PRICE, 
+  		PRODUCT_STOCK, PRODUCT_DESC
+  		FROM 
+  		PRODUCT
+  		WHERE PRODUCT_NUMBER = #{ product_number }   		  		
+  	
+  	</select>  	 	 	
+     -->
+     
+     
+    <!-- 중식 상세 페이지 -->
+  	<select id="chinaInfo" resultType="com.mealkit.product.ProductVo">
+  		select
+     product.PRODUCT_NUMBER
+    ,product.PRODUCT_NAME
+    ,product.PRODUCT_STOCK
+    ,product.PRODUCT_PRICE
+    ,product.PRODUCT_DESC
+    ,product_img.FILENAME
+    ,product_img.UPLOADPATH
+    ,product_img.UUID
+    FROM 
+        PRODUCT 
+        FULL OUTER JOIN product_img
+        ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+        where product.product_number = #{product.product_number}   		  		
+  	
+  	</select>  	 	 	
+      
+      
+    <!-- 일식 상세 페이지 -->       
+  	<select id="japInfo" resultType="com.mealkit.product.ProductVo">
+  	
+  			select
+     product.PRODUCT_NUMBER
+    ,product.PRODUCT_NAME
+    ,product.PRODUCT_STOCK
+    ,product.PRODUCT_PRICE
+    ,product.PRODUCT_DESC
+    ,product_img.FILENAME
+    ,product_img.UPLOADPATH
+    ,product_img.UUID
+    FROM 
+        PRODUCT 
+        FULL OUTER JOIN product_img
+        ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+        where product.product_number = #{product.product_number}   		  		
+  	
+  	</select>  	 	 	
+      
+      
+     <!-- 양식 상세 페이지 -->
+  	<select id="euInfo" resultType="com.mealkit.product.ProductVo">
+  	
+  			select
+     product.PRODUCT_NUMBER
+    ,product.PRODUCT_NAME
+    ,product.PRODUCT_STOCK
+    ,product.PRODUCT_PRICE
+    ,product.PRODUCT_DESC
+    ,product_img.FILENAME
+    ,product_img.UPLOADPATH
+    ,product_img.UUID
+    FROM 
+        PRODUCT 
+        FULL OUTER JOIN product_img
+        ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+        where product.product_number = #{product.product_number}		  		
+  	
+  	</select>
+  	
+  	<!-- 이벤트식 상세 페이지 -->
+  	<select id="eventInfo" resultType="com.mealkit.product.ProductVo">
+  	
+  			select
+     product.PRODUCT_NUMBER
+    ,product.PRODUCT_NAME
+    ,product.PRODUCT_STOCK
+    ,product.PRODUCT_PRICE
+    ,product.PRODUCT_DESC
+    ,product_img.FILENAME
+    ,product_img.UPLOADPATH
+    ,product_img.UUID
+    FROM 
+        PRODUCT 
+        FULL OUTER JOIN product_img
+        ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+        where product.product_number = #{product.product_number}
+  	</select>    	 	 	
+       
+      
+   
+      
+  	
+<!--  목록 삭제 -->
+  <delete  id="deleteProduct"> 
+      
+    DELETE FROM PRODUCT WHERE product_number = #{ product_number}
+       
+       
+       
+  </delete>
+
+    
+    
+     <!-- 한식 페이징 -->
+     <select id="koreapaging" resultType="com.mealkit.product.ProductVo">
+     	 
+         SELECT 
+         PRODUCT_NUMBER
+          ,PRODUCT_NAME          
+          ,PRODUCT_PRICE      
+          ,FILENAME
+          ,UPLOADPATH
+          ,UUID
+    FROM  ( 
+    SELECT 
+           product.PRODUCT_NUMBER
+          ,product.PRODUCT_NAME          
+          ,product.PRODUCT_PRICE      
+          ,product_img.FILENAME
+          ,product_img.UPLOADPATH
+          ,product_img.UUID
+          ,ROW_NUMBER() OVER(ORDER BY product.PRODUCT_NUMBER DESC) AS RNUM
+           FROM PRODUCT 
+           FULL OUTER JOIN product_img
+           ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER 
+        where category_code = 01) FR
+      WHERE RNUM BETWEEN  #{ rowStart } AND #{ rowEnd } 
+      ORDER BY PRODUCT_NUMBER DESC
+     
+     
+     
+     
+      </select>
+      
+      <!-- 한식 카운트 -->
+      <select id="listCount" resultType="int">
+		  <![CDATA[
+            SELECT COUNT(PRODUCT.PRODUCT_NUMBER)
+			FROM PRODUCT
+			WHERE PRODUCT.CATEGORY_CODE = 01 AND PRODUCT.PRODUCT_NUMBER > 0
+		  ]]>
+	  </select>
+    
+      <!-- 중식 페이징 -->
+      <select id="chinapaging" resultType="com.mealkit.product.ProductVo">
+      		SELECT 
+     		PRODUCT_NUMBER,
+			PRODUCT_NAME,
+			PRODUCT_PRICE,
+			PRODUCT_STOCK,
+			PRODUCT_DESC,
+			CATEGORY_CODE
+		FROM ( 
+	        SELECT 
+	        PRODUCT_NUMBER,
+	        PRODUCT_NAME,
+	        PRODUCT_PRICE,
+	        PRODUCT_STOCK,
+      		PRODUCT_DESC,
+      		CATEGORY_CODE,
+            ROW_NUMBER() OVER(ORDER BY PRODUCT_NUMBER DESC) AS RNUM
+            FROM PRODUCT
+            WHERE  CATEGORY_CODE = 02) FR
+		WHERE RNUM BETWEEN #{ rowStart } AND #{ rowEnd } ORDER BY PRODUCT_NUMBER DESC 
+      </select>
+      
+      <!-- 중식 페이징 -->
+      <select id="listChinaCount" resultType="int">
+		  <![CDATA[
+            SELECT COUNT(PRODUCT_NUMBER)
+			FROM PRODUCT
+			WHERE CATEGORY_CODE = 02 AND PRODUCT_NUMBER > 0
+		  ]]>
+	  </select>
+      
+        <!-- 일식 페이징 -->
+      <select id="jappaging" resultType="com.mealkit.product.ProductVo">
+     	SELECT 
+     		PRODUCT_NUMBER,
+			PRODUCT_NAME,
+			PRODUCT_PRICE,
+			PRODUCT_STOCK,
+			PRODUCT_DESC,
+			CATEGORY_CODE
+		FROM ( 
+	        SELECT 
+	        PRODUCT_NUMBER,
+	        PRODUCT_NAME,
+	        PRODUCT_PRICE,
+	        PRODUCT_STOCK,
+      		PRODUCT_DESC,
+      		CATEGORY_CODE,
+            ROW_NUMBER() OVER(ORDER BY PRODUCT_NUMBER DESC) AS RNUM
+            FROM PRODUCT
+            WHERE  CATEGORY_CODE = 03) FR
+		WHERE RNUM BETWEEN #{ rowStart } AND #{ rowEnd } ORDER BY PRODUCT_NUMBER DESC 
+      </select>
+ 
+      <!-- 일식 카운트 -->
+      <select id="listJapCount" resultType="int">
+		  <![CDATA[
+            SELECT COUNT(PRODUCT_NUMBER)
+			FROM PRODUCT
+			WHERE CATEGORY_CODE = 03 AND PRODUCT_NUMBER > 0
+		  ]]>
+	  </select>
+        <!-- 양식 페이징 -->
+      <select id="eupaging" resultType="com.mealkit.product.ProductVo">
+      		SELECT 
+     		PRODUCT_NUMBER,
+			PRODUCT_NAME,
+			PRODUCT_PRICE,
+			PRODUCT_STOCK,
+			PRODUCT_DESC,
+			CATEGORY_CODE
+		FROM ( 
+	        SELECT 
+	        PRODUCT_NUMBER,
+	        PRODUCT_NAME,
+	        PRODUCT_PRICE,
+	        PRODUCT_STOCK,
+      		PRODUCT_DESC,
+      		CATEGORY_CODE,
+            ROW_NUMBER() OVER(ORDER BY PRODUCT_NUMBER DESC) AS RNUM
+            FROM PRODUCT
+            WHERE  CATEGORY_CODE = 04) FR
+		WHERE RNUM BETWEEN #{ rowStart } AND #{ rowEnd } ORDER BY PRODUCT_NUMBER DESC 
+
+      </select>
+      
+      <!-- 양식 카운트 -->
+      <select id="listEuCount" resultType="int">
+		  <![CDATA[
+            SELECT COUNT(PRODUCT_NUMBER)
+			FROM PRODUCT
+			WHERE CATEGORY_CODE = 04 AND PRODUCT_NUMBER > 0
+		  ]]>
+	  </select>
+        <!-- 이벤트 리스트 -->
+      <select id="eventpaging" resultType="com.mealkit.product.ProductVo">
+      			SELECT 
+     		PRODUCT_NUMBER,
+			PRODUCT_NAME,
+			PRODUCT_PRICE,
+			PRODUCT_STOCK,
+			PRODUCT_DESC,
+			CATEGORY_CODE
+		FROM ( 
+	        SELECT 
+	        PRODUCT_NUMBER,
+	        PRODUCT_NAME,
+	        PRODUCT_PRICE,
+	        PRODUCT_STOCK,
+      		PRODUCT_DESC,
+      		CATEGORY_CODE,
+            ROW_NUMBER() OVER(ORDER BY PRODUCT_NUMBER DESC) AS RNUM
+            FROM PRODUCT
+            WHERE  CATEGORY_CODE = 05) FR
+		WHERE RNUM BETWEEN #{ rowStart } AND #{ rowEnd } ORDER BY PRODUCT_NUMBER DESC 
+      </select>
+      
+      <!-- 이벤트 카운트 -->
+      <select id="listEventCount" resultType="int">
+		  <![CDATA[
+            SELECT COUNT(PRODUCT_NUMBER)
+			FROM PRODUCT
+			WHERE CATEGORY_CODE = 05 AND PRODUCT_NUMBER > 0
+		  ]]>
+	  </select>
+      
+	  <select id="mainImgList" resultType="com.mealkit.product.ProductImgVo">
+        select
+		     product.PRODUCT_NUMBER
+		    ,product.PRODUCT_NAME
+		    ,product.PRODUCT_PRICE
+		    ,product_img.FILENAME
+		    ,product_img.UPLOADPATH
+		    ,product_img.UUID
+  		FROM PRODUCT
+    	left outer JOIN product_img
+    	ON PRODUCT.PRODUCT_NUMBER = product_img.PRODUCT_NUMBER
+    	ORDER BY product_price ASC
+      
+      </select>   
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

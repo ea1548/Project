@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- 조회 -->
+  <mapper namespace = "CustomerBoardRe">
+  	
+  	<select id="getCustomerReplyList" 
+  	resultType="com.mealkit.cusboard.re.CustomerBoardReVo">
+    	SELECT
+    		CUS_NO,
+			CUS_REPLY_CONTENT,
+			CUS_REPLY,
+			CUSTOMER_REPLY_NO
+    	 FROM 
+    	 	CUSTOMER_REPLY
+    	 WHERE CUS_NO = #{ cus_no }
+    	 ORDER BY CUSTOMER_REPLY_NO
+	</select>
+
+   <insert id = "replyInsert">
+   INSERT INTO CUSTOMER_REPLY(
+	  CUS_NO
+	, CUSTOMER_REPLY_NO
+	, CUS_REPLY_CONTENT
+	, CUS_REPLY
+	)
+	VALUES( 
+	  #{ cus_no }
+	, ( SELECT NVL(MAX(CUSTOMER_REPLY_NO),0)+1 FROM CUSTOMER_REPLY )
+	, #{cus_reply_content}
+	, SYSDATE	
+	)
+   </insert>
+   
+   <select id="getCustomerReplyOne" 
+   resultType="com.mealkit.cusboard.re.CustomerBoardReVo">
+   		SELECT
+    		CUS_NO,
+			CUS_REPLY_CONTENT,			
+			CUS_REPLY,
+			CUSTOMER_REPLY_NO
+    	 FROM 
+    	 	CUSTOMER_REPLY
+    	 WHERE CUSTOMER_REPLY_NO = #{ customer_reply_no }
+	</select>
+	
+	<update id="replyUpdate">
+		UPDATE CUSTOMER_REPLY
+		   SET CUS_REPLY_CONTENT = #{cus_reply_content, jdbcType=VARCHAR}
+		 WHERE CUSTOMER_REPLY_NO = #{customer_reply_no} 
+	</update>
+	
+	<delete id="replyDelete">
+		DELETE FROM CUSTOMER_REPLY
+		WHERE CUSTOMER_REPLY_NO = #{customer_reply_no}
+	</delete>
+  </mapper>

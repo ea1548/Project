@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+	* {
+	    box-sizing: border-box;
+	  }
+	  
+	  body {
+	  	margin: 0;
+	  	padding: 0;
+	  }
+	  
+	  .navbar{
+	  	height: 60px;
+	  	padding-left: 30px;
+	  }
+	  
+	  .navbar ul{
+	    float: right;
+	  }
+	  
+	  .navbar li{
+	    list-style-type: none;
+	    float: left;
+	    margin-right: 30px;
+	  }
+	  
+	  .navbar a{
+	    text-decoration: none;
+	    color: black;
+	    font-style: bold;
+	    font-size: 13px;
+	  }
+	
+	  .logo{
+	    	position: relative;
+	    	top: -42px;
+	    	left: 72px;
+	    	text-decoration: none;
+	  }
+	
+	 	.icon{
+	 		position: relative;
+	 		top: -73px;
+	 		left: 29px;
+	 	}
+	  
+		.sidemenu {
+		    height: 100%;
+		    width: 0;
+		    position: fixed;
+		    z-index: 1;
+		    top: 0;
+		    left: 0;
+		    background-color: #111;
+		    overflow-x: hidden;
+		    transition: 0.5s;
+		    padding-top: 60px;
+		    line-height: 90px;
+		}
+		
+		.sidemenu a {
+		    padding: 8px 8px 8px 32px;
+		    text-decoration: none;
+		    font-size: 25px;
+		    color: #818181;
+		    display: block;
+		    transition: 0.3s;
+		}
+		
+		.sidemenu a:hover {
+		    color: #f1f1f1;
+		}
+		
+		.sidemenu .closebtn {
+		    position: absolute;
+		    top: 0;
+		    right: 25px;
+		    font-size: 36px;
+		    margin-left: 50px;
+		}
+		
+		@media screen and (max-height: 450px) {
+		  .sidemenu {padding-top: 15px;}
+		  .sidemenu a {font-size: 18px;}
+		}
+
+	.japanesefood {
+	    margin: 0px auto;
+	    padding: 0px;
+	    width: 1000px;
+	    text-align: center;
+
+	  }
+
+	.japanesefood img{
+	    width: 225px;
+	    height: 225px;
+	   
+	  }
+	  
+	  
+	 .japanesefood ul{
+	    text-decoration: none;
+	    color: black;
+	    float: left;
+	    position: relative;
+	 	top: 100px;
+	  }
+	  
+	  .pagemove{
+	  	position: relative;
+	  	top: 475px;
+	  	right: 480px;
+	  	
+	  	
+	  }
+	  
+	  .pagemove ul{
+	  	text-align: center;
+	  	
+	  }
+	  
+	  .pagemove li{
+	  	vertical-align: middle;
+	  	list-style: none;
+	  	display:inline-block;
+	  	min-width: 26px;
+	  	
+	  	
+	  }
+	  
+	  .pagemove a{
+	  	text-decoration-line : none;
+	  }
+	  
+	  .pagemove span{
+    	background: skyblue;
+    	border-radius: 20px;
+	  	display: block;
+    	height: 30px;
+    	width: 30px;
+   		color: white;
+    	line-height: 30px;
+    	
+	  }
+	  
+	  .pagemove circle{
+	  	display: inline-block;
+	  }
+	  
+	  

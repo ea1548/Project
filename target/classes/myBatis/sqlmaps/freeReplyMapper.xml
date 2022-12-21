@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- 조회 -->
+  <mapper namespace = "freeReplyMapper">
+  	
+  	<select id="readFreeReply" resultType="com.mealkit.freeboard.FreeBoardReVo">
+    	SELECT
+    		 FREE_NO, FREE_REPLY_NO, FREE_REPLY_CONTENT, MEMBER_ID, FREE_REPLY
+    	 FROM 
+    	 	FREE_BOARD_REPLY
+    	 WHERE FREE_NO = #{ free_no }
+	</select>
+   
+   
+   <insert id = "writeFreeReply">
+   INSERT INTO FREE_BOARD_REPLY(
+	  FREE_NO
+	, FREE_REPLY_NO
+	, FREE_REPLY_CONTENT
+	, MEMBER_ID
+	, FREE_REPLY
+)
+VALUES( #{ free_no }
+	, ( SELECT NVL(MAX(FREE_REPLY_NO),0)+1 FROM FREE_BOARD_REPLY )
+	, #{free_reply_content}
+	, #{member_id}
+	, SYSDATE	)
+   
+   </insert>
+  
+  <!-- 댓글 수정 -->
+	<update id="updateFreeReply" parameterType="com.mealkit.freeboard.FreeBoardReVo">
+		UPDATE FREE_BOARD_REPLY SET FREE_REPLY_CONTENT = #{free_reply_content}
+		WHERE FREE_NO = #{free_no}
+	</update>
+
+<!-- 댓글 삭제 -->
+	<delete id="deleteFreeReply" parameterType="com.mealkit.freeboard.FreeBoardReVo">
+		DELETE FROM FREE_BOARD_REPLY
+		WHERE FREE_REPLY_NO = #{free_reply_no}
+	</delete>
+	
+<!-- 선택된 댓글 조회 -->
+	<select id="selectFreeReply" resultType="com.mealkit.freeboard.FreeBoardReVo">
+		SELECT
+				FREE_NO
+			  , FREE_REPLY_NO
+			  , FREE_REPLY_CONTENT
+			  , MEMBER_ID
+			  , FREE_REPLY
+		  FROM FREE_BOARD_REPLY
+		WHERE FREE_NO = #{free_no}
+	</select>
+  
+  
+  
+  </mapper>

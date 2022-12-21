@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="InfoBoard">
+
+<insert  id="InfoBoardInsert" >
+    INSERT INTO INFO_BOARD (
+    	CATEGORY_CODE,
+	    INFO_NO,
+	    MEMBER_ID,
+	    INFO_BOARD_TITLE,
+	    INFO_BOARD_CONTENT,
+	    INFO_BOARD_DATE
+	   
+	) VALUES (
+		#{category_code},
+	    ( SELECT NVL(MAX(INFO_NO),0)+1 FROM INFO_BOARD ),
+	    #{member_id},
+	    #{info_board_title},
+	    #{info_board_content, jdbcType=VARCHAR},
+	    SYSDATE)
+	    
+    </insert>
+   
+   <select id="InfoBoardList"
+      resultType="com.mealkit.infoboard.InfoBoardVo"
+      parameterType="com.mealkit.paging.Criteria">
+    SELECT  
+    	INFO_NO,
+        MEMBER_ID,
+        CATEGORY_CODE,
+        INFO_BOARD_TITLE,
+        INFO_BOARD_CONTENT,
+        INFO_BOARD_DATE
+ FROM ( 
+		SELECT  INFO_NO,
+        MEMBER_ID,
+        CATEGORY_CODE,
+        INFO_BOARD_TITLE,
+        INFO_BOARD_CONTENT,
+        INFO_BOARD_DATE,
+        ROW_NUMBER() OVER(ORDER BY INFO_NO DESC) AS RNUM
+        FROM INFO_BOARD) mp
+        WHERE RNUM BETWEEN #{rowStart, jdbcType=INTEGER} AND #{rowEnd, jdbcType=INTEGER}
+		ORDER BY INFO_NO DESC
+    </select>
+    
+    <select id="infoBoardDetail"
+      resultType="com.mealkit.infoboard.InfoBoardVo">
+    SELECT 
+	    INFO_NO,
+		MEMBER_ID,
+		INFO_BOARD_TITLE,
+		INFO_BOARD_CONTENT,
+		INFO_BOARD_DATE,
+		CATEGORY_CODE
+	FROM INFO_BOARD
+	WHERE INFO_NO = #{info_no}
+    </select>
+    
+     <update id="infoBoardUpdate" parameterType="com.mealkit.cusboard.CustomerBoardVo">
+		UPDATE INFO_BOARD
+		   SET INFO_BOARD_TITLE    =   #{info_board_title},
+		   	   INFO_BOARD_CONTENT  =   #{info_board_content}
+		 WHERE INFO_NO = #{info_no} 
+	</update>
+	
+	<delete id="deleteinfoBoard" >
+		DELETE 
+		FROM INFO_BOARD
+		WHERE INFO_NO = #{info_no}
+	</delete>
+	
+	<select id="listCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(INFO_NO)
+		FROM INFO_BOARD
+		WHERE INFO_NO > 0
+	]]>
+	</select>
+    </mapper>

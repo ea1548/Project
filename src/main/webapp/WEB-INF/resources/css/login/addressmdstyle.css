@@ -1,0 +1,92 @@
+@charset "UTF-8";
+
+	*{ 
+		padding: 0; margin: 0; 
+	} 
+
+	html{
+		background-color: #F3EFE0;
+	}
+	
+	
+	address_input_1_wrap{text-align: center;}
+	button{ 
+		cursor: pointer; 
+	}
+	
+	.logo{
+	    	position: fixed;
+	    	top: 42px;
+	    	left: 172px;
+	    	text-decoration: none;
+	    	font-size: 30px;
+	  }
+	
+	h2{
+		 	text-align: center;
+		 	position: fixed;
+		 	top: 100px;
+		 	left: 830px;
+		 	cursor: pointer;
+		 	font-size: 30px;
+		 }
+		 
+	textarea{
+		position: relative;
+		left: 630px;
+		top: 300px;
+	}
+	
+	.signupbox{
+	    width: 780px; 
+	    height: 550px;
+	    margin: 0 auto;
+	}
+	
+	.addressbox label{
+	    display: block;
+	    font-size: 15px; 
+	    color: #333;
+	    margin-bottom: 10px;
+	    position: relative;
+		top: 200px;
+		left: 575px;
+	}
+	
+	.addressbox form{
+	    width: 100%; 
+	    height: 450px;
+	    background-color: #F3EFE0;
+	    padding: 60px; 
+	    box-sizing: border-box;
+	}
+	.addressbox fieldset{
+	    border: none;
+	}
+	
+	.addressbox textarea{
+		position: relative;
+		top: 200px;
+		left: 575px;
+		display: block;
+	    margin-bottom: 25px;
+	    border: none; 
+	    background-color: #ededed;
+	    border-left: 1px solid black;
+	  	border-right: 1px solid black;
+	  	border-top: 1px solid black;
+	  	border-bottom: 1px solid black;
+	}
+	
+	/* position: relative;
+		top: 55px;
+		left: 1000px; 
+		background-color: #1673ea;*/
+	button{
+		
+	    
+		
+		width: 70px;
+		height: 30px;
+		color: white;
+	} 

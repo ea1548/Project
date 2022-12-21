@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- 조회 -->
+  <mapper namespace = "InfoBoardRe">
+  	
+  	<select id="getInfoReplyList" resultType="com.mealkit.infoboard.re.InfoBoardReVo">
+    	SELECT
+    		INFO_NO,
+			INFO_REPLY_CONTENT,
+			MEMBER_ID,
+			INFO_REPLY,
+			INFO_REPLY_NO
+    	 FROM 
+    	 	INFO_BOARD_REPLY
+    	 WHERE INFO_NO = #{ info_no }
+    	 ORDER BY INFO_REPLY_NO
+	</select>
+
+   <insert id = "replyInsert">
+   INSERT INTO INFO_BOARD_REPLY(
+	  INFO_NO
+	, INFO_REPLY_NO
+	, INFO_REPLY_CONTENT
+	, MEMBER_ID
+	, INFO_REPLY
+	)
+	VALUES( 
+	  #{ info_no }
+	, ( SELECT NVL(MAX(INFO_REPLY_NO),0)+1 FROM INFO_BOARD_REPLY )
+	, #{info_reply_content}
+	, #{member_id}
+	, SYSDATE	
+	)
+   </insert>
+   
+   <select id="getInfoReplyOne" resultType="com.mealkit.infoboard.re.InfoBoardReVo">
+   		SELECT
+    		INFO_NO,
+			INFO_REPLY_CONTENT,
+			MEMBER_ID,
+			INFO_REPLY,
+			INFO_REPLY_NO
+    	 FROM 
+    	 	INFO_BOARD_REPLY
+    	 WHERE INFO_REPLY_NO = #{ free_reply_no }
+	</select>
+	
+	<update id="replyUpdate">
+		UPDATE INFO_BOARD_REPLY
+		   SET INFO_REPLY_CONTENT = #{info_reply_content}
+		 WHERE INFO_REPLY_NO = #{info_reply_no} 
+	</update>
+	
+	<delete id="replyDelete">
+		DELETE FROM INFO_BOARD_REPLY
+		WHERE INFO_REPLY_NO = #{info_reply_no}
+	</delete>
+  </mapper>

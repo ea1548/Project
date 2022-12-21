@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CustomerBoard">
+
+	<insert  id="CustomerBoardInsert" >
+    INSERT INTO CUSTOMER_BOARD (
+    	CATEGORY_CODE,
+	    CUS_NO,
+	    MEMBER_ID,
+	    CUS_BOARD_TITLE,
+	    CUS_BOARD_CONTENT,
+	    CUS_BOARD_DATE
+	) VALUES (
+		#{category_code},
+	    ( SELECT NVL(MAX(CUS_NO),0)+1 FROM CUSTOMER_BOARD ),
+	    #{member_id},
+	    #{cus_board_title},
+	    #{cus_board_content, jdbcType=VARCHAR},
+	    SYSDATE
+	)
+	    
+    </insert>
+   
+   <select id="CustomerBoardList"
+      resultType="com.mealkit.cusboard.CustomerBoardVo"
+      parameterType="com.mealkit.paging.Criteria">
+    SELECT  
+    	CUS_NO,
+        MEMBER_ID,
+        CATEGORY_CODE,
+        CUS_BOARD_TITLE,
+        CUS_BOARD_CONTENT,
+        CUS_BOARD_DATE
+ 	FROM ( 
+		SELECT  
+		CUS_NO,
+        MEMBER_ID,
+        CATEGORY_CODE,
+        CUS_BOARD_TITLE,
+        CUS_BOARD_CONTENT,
+        CUS_BOARD_DATE,
+        ROW_NUMBER() OVER(ORDER BY CUS_NO DESC) AS RNUM
+        FROM CUSTOMER_BOARD) mp
+        WHERE RNUM BETWEEN #{rowStart, jdbcType=INTEGER} AND #{rowEnd, jdbcType=INTEGER}
+		ORDER BY CUS_NO DESC
+    </select>
+    
+    <select id="CustomerBoardDetail"
+      resultType="com.mealkit.cusboard.CustomerBoardVo">
+    SELECT 
+	    CUS_NO,
+        MEMBER_ID,
+        CATEGORY_CODE,
+        CUS_BOARD_TITLE,
+        CUS_BOARD_CONTENT,
+        CUS_BOARD_DATE
+	FROM CUSTOMER_BOARD
+	WHERE CUS_NO = #{cus_no}
+    </select>
+    
+     <update id="CustomerBoardUpdate" parameterType="com.mealkit.cusboard.CustomerBoardVo">
+		UPDATE CUSTOMER_BOARD
+		   SET CUS_BOARD_TITLE    =   #{cus_board_title},
+		   	   CUS_BOARD_CONTENT  =   #{cus_board_content}
+		 WHERE CUS_NO = #{cus_no} 
+	</update>
+	
+	<delete id="DeleteCustomerBoard" >
+		DELETE 
+		FROM CUSTOMER_BOARD
+		WHERE CUS_NO = #{cus_no}
+	</delete>
+	
+	<select id="listCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(CUS_NO)
+		FROM CUSTOMER_BOARD
+		WHERE CUS_NO > 0
+	]]>
+	</select>
+</mapper>

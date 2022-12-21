@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+
+	<!-- 회원정보 넣기 -->
+    <insert  id="Register" >
+    INSERT INTO MEMBER (
+		MEMBER_ID,
+		MEMBER_PWD,
+		MEMBER_NAME,
+		MEMBER_EMAIL,
+		MEMBER_PHONE,
+		MEMBER_ROLE,
+		MEMBER_INSERTDATE
+	) VALUES (
+		#{ member_id },
+		#{ member_pwd },
+		#{ member_name },
+		#{ member_email },
+		#{ member_phone },
+		0,
+		SYSDATE
+	)    
+    </insert>
+    
+    <select id="UserList"
+      resultType="com.mealkit.member.MemberVo">
+    SELECT
+        MEMBER_ID,
+		MEMBER_NAME,
+		MEMBER_EMAIL,
+		MEMBER_PHONE,
+		MEMBER_INSERTDATE
+ 	FROM ( 
+		SELECT  
+        MEMBER_ID,
+		MEMBER_NAME,
+		MEMBER_EMAIL,
+		MEMBER_PHONE,
+		MEMBER_INSERTDATE,
+        ROW_NUMBER() OVER(ORDER BY MEMBER_INSERTDATE DESC) AS RNUM
+        FROM MEMBER) mp
+        WHERE RNUM BETWEEN #{rowStart, jdbcType=INTEGER} AND #{rowEnd, jdbcType=INTEGER}
+		ORDER BY  MEMBER_INSERTDATE DESC
+    </select>
+    
+    <!-- 회원정보 불러오기 -->
+    <select id="member" resultType="com.mealkit.member.MemberVo">
+    	SELECT
+    		MEMBER_ID AS MEMBER_ID,
+    		MEMBER_NAME AS MEMBER_NAME,
+    		MEMBER_EMAIL AS MEMBER_EMAIL,
+    		MEMBER_PWD AS MEMBER_PWD
+    	FROM
+    		MEMBER
+    	WHERE
+    		MEMBER_ID = #{MEMBER_ID}, MEMBER_NAME = #{MEMBER_NAME}, MEMBER_EMAIL = #{MEMBER_EMAIL}, MEMBER_PWD = #{MEMBER_PWD}	
+    </select>
+    
+
+    <delete id="deleteMember">
+    	DELETE FROM MEMBER WHERE member_id = #{ member_id}
+    </delete>
+    
+    <!-- 회원정보 출력 -->
+    <select id="GetMember"
+            resultType="com.mealkit.member.MemberVo">
+    
+    	SELECT   
+	    	MEMBER_ID,
+			MEMBER_PWD,
+			MEMBER_NAME,
+			MEMBER_EMAIL,
+			MEMBER_PHONE,
+			MEMBER_ROLE,
+			MEMBER_INSERTDATE,
+			ENABLED,
+			MEMBER_NPWD
+    	 FROM    MEMBER
+    	 WHERE   MEMBER_ID = #{member_id, jdbcType=VARCHAR}
+    
+    </select>
+    
+    <!-- 회원정보 변경 -->
+    <update id="updateMember">
+    	UPDATE
+			MEMBER
+    	SET
+    		MEMBER_PWD = #{ member_pwd },
+    		MEMBER_EMAIL = #{ member_email },
+    		MEMBER_PHONE = #{ member_phone }
+    	WHERE
+    		MEMBER_ID = #{member_id}
+    </update>
+  	
+ 	<select id="listCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT( MEMBER_ID)
+		FROM MEMBER
+	]]>
+	</select> 	
+</mapper>

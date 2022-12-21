@@ -1,0 +1,191 @@
+@charset "UTF-8";
+	*{ 
+		padding: 0;
+
+	} 
+	
+	html{
+	  	background-color: #F3EFE0;
+	  	min-height: 140%
+	  }
+	
+	h1{
+		text-align: center;
+	}
+	
+	a{ 
+		text-decoration: none;
+	 }
+	
+	button{
+		cursor: pointer;
+		background-color: #1673ea;
+	    color: #fff; 
+	    font-size: 14px;
+	    border: none;
+	    width: 50%;
+	    text-align: center;
+	    line-height: 50px;
+	}
+	
+	
+	.move{text-align: center}
+	.navbar{
+	  	height: 60px;
+	  	padding-left: 30px;
+	  }
+	  
+	  .navbar ul{
+	    float: right;
+	    top: -25px;
+    	position: relative;
+	  }
+	  
+	  .navbar li{
+	    list-style-type: none;
+	    float: left;
+	    margin-right: 30px;
+	  }
+	  
+	  .navbar a{
+	    text-decoration: none;
+	    color: black;
+	    font-size: 20px;
+	  }
+	
+	.loginbox{
+	    width: 780px; 
+	    height: 550px;
+	    margin: 0 auto;
+	}
+	
+	.logo{
+	    top: 55px;
+	    left: 155px;
+	    font-size: 30px;
+	    position: relative;
+	    text-decoration: none;
+	 }
+	 
+	 .icon{
+	 		position: relative;
+	 		top: 14px;
+	 		left: 105px;
+	 	}
+	 
+	 .sidemenu {
+		    height: 100%;
+		    width: 0;
+		    position: fixed;
+		    z-index: 1;
+		    top: 0;
+		    left: 0;
+		    background-color: #111;
+		    overflow-x: hidden;
+		    transition: 0.5s;
+		    padding-top: 60px;
+		    line-height: 90px;
+		}
+		
+		.sidemenu a {
+		    padding: 8px 8px 8px 32px;
+		    text-decoration: none;
+		    font-size: 25px;
+		    color: #818181;
+		    display: block;
+		    transition: 0.3s;
+		}
+		
+		.sidemenu a:hover {
+		    color: #f1f1f1;
+		}
+		
+		.sidemenu .closebtn {
+		    position: absolute;
+		    top: 0;
+		    right: 25px;
+		    font-size: 36px;
+		    margin-left: 50px;
+		}
+		
+		@media screen and (max-height: 450px) {
+		  .sidemenu {padding-top: 15px;}
+		  .sidemenu a {font-size: 18px;}
+		}
+	 
+	.loginbox form{
+	    width: 100%; 
+	    height: 450px;
+	    background-color: #F3EFE0;
+	    padding: 50px 60px; 
+	    box-sizing: border-box;
+	    
+	}
+	.loginbox fieldset{
+	    border: none;
+	}
+	.loginbox legend{
+	    position: absolute; 
+	    left: -999em;
+	    
+	}
+	.loginbox label{
+	    display: block;
+	    font-size: 15px; 
+	    color: #333;
+	    margin-bottom: 10px;
+	}
+	.loginbox input{
+	    display: block;
+	    width: 100%; 
+	    height: 50px;
+	    margin-bottom: 25px;
+	    background-color: #ededed;
+	    padding: 0 20px;
+	    box-sizing: border-box; 
+	}
+	
+
+	
+	.loginbox a{
+	    width: 80%; 
+	    margin: 25px 55px;
+	    border: none;
+	    background-color: #1673ea;
+	    color: #fff; 
+	    font-size: 14px; 
+	    font-weight: bold;
+	    text-align: center;
+	    line-height: 50px; 
+	    float: left;  
+	}
+	
+	#address99 {
+		width: 100%; 
+	    border: none;
+	    background-color: #1673ea;
+	    color: #fff; 
+	    font-size: 14px; 
+	    font-weight: bold;
+	    line-height: 50px;
+		
+	}
+	
+	#change{
+		position: relative;
+    	width: 150px;
+    	left: 700px;
+    	bottom: 74px; 
+	    border: none;
+	    background-color: #1673ea;
+	    color: #fff; 
+	    font-size: 14px; 
+	    font-weight: bold;
+	    line-height: 50px; 
+	}
+	
+	#now{
+		position: relative;
+		bottom: 50px;
+	}
+	

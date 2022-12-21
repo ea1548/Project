@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FreeBoard">
+
+<insert  id="FreeBoardInsert" >
+    INSERT INTO FREE_BOARD (
+	    FREE_NO,
+	    MEMBER_ID,
+	    FREE_BOARD_TITLE,
+	    FREE_BOARD_CONTENT,
+	    FREE_BOARD_DATE
+	   
+	) VALUES (
+	    ( SELECT NVL(MAX(FREE_NO),0)+1 FROM FREE_BOARD ),
+	    #{member_id},
+	    #{free_board_title},
+	    #{free_board_content, jdbcType=VARCHAR},
+	    SYSDATE)
+	    
+    </insert>
+   
+   <select id="FreeBoardListPage"
+      resultType="com.mealkit.freeboard.FreeBoardVo" parameterType="com.mealkit.freeboard.Standard">
+SELECT 
+      free_no, 
+      FREE_BOARD_TITLE, 
+      FREE_BOARD_CONTENT,
+      MEMBER_ID, 
+      free_board_date
+FROM ( 
+        SELECT free_no, 
+               FREE_BOARD_TITLE, 
+               FREE_BOARD_CONTENT, 
+               MEMBER_ID, 
+               free_board_date, 
+               ROW_NUMBER() OVER(ORDER BY FREE_NO DESC) AS RNUM
+               FROM FREE_BOARD 
+		                       ) FR
+WHERE RNUM BETWEEN #{ rowStart } AND #{ rowEnd }
+
+ORDER BY FREE_NO DESC
+    
+    </select>
+    
+    <select id="listCount" resultType="int">
+    <![CDATA[
+    	SELECT COUNT(FREE_NO)
+    	FROM FREE_BOARD
+    	WHERE FREE_NO > 0
+    
+    ]]>
+    
+    </select>
+    
+    <select id="read"
+      resultType="com.mealkit.freeboard.FreeBoardVo">
+    SELECT 
+	    FREE_NO,
+		MEMBER_ID,
+		FREE_BOARD_TITLE,
+		FREE_BOARD_CONTENT,
+		FREE_BOARD_DATE
+	FROM FREE_BOARD
+	WHERE FREE_NO = #{free_no}
+	
+    
+    </select>
+    
+     <update id="update" parameterType="com.mealkit.freeboard.FreeBoardVo">
+		UPDATE FREE_BOARD
+		   SET FREE_BOARD_TITLE    =   #{free_board_title},
+		   	   FREE_BOARD_CONTENT  =   #{free_board_content}
+		 WHERE FREE_NO = #{free_no} 
+	</update>
+	
+	<delete id="delete" >
+		DELETE 
+		  FROM FREE_BOARD
+		 WHERE FREE_NO = #{free_no, jdbcType=INTEGER}
+	</delete>
+	
+    </mapper>
